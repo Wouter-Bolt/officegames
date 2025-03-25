@@ -31,7 +31,8 @@ let main args =
         CurrentColumn = 3;
         Players = (player1, player2);
         Grid = grid;
-        VisualGrid = visualGrid }
+        VisualGrid = visualGrid
+        RoundState = Undecided }
 
     moveCurrUp 4
     Console.Write "Use the arrow keys (<- ->) to move column, and hit enter to confirm\n"
@@ -39,8 +40,14 @@ let main args =
     Console.Write "                                                                   \n"
     Console.Write "                                                                   \n"
 
-    Gameloop initialState
+    let finalState = Gameloop initialState
     moveCurrDown 15
+
+    match finalState.RoundState with
+    | Won byPlayer -> Console.Write $"{byPlayer.Icon} has won the game, congratulations player {byPlayer.Name}🥳"
+    | Tied -> Console.Write "Well played, it looks like a tie to me"
+    | _ -> Console.Write "This is really weird, the game ended with an ongoing state, i'd say you can safely fire the dev that wrote this"
+
     Console.CursorVisible <- true
 
     0
